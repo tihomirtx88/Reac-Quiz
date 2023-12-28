@@ -5,12 +5,15 @@ import Loader from "./components/Loader";
 import Error from "./components/Error";
 import StartScreen from "./components/StartScreen";
 import Question from "./components/Question";
+import NextButton from "./components/NextButton";
 
 const initialState = {
   questions: [],
   // loading,error,ready,active,finished
   status: "loading",
   currentIndex: 0,
+  answer: null,
+  points: 0,
 };
 
 function reducer(state, action) {
@@ -31,13 +34,29 @@ function reducer(state, action) {
         ...state,
         status: "active",
       };
+    case "newAnswer":
+      const question = state.questions.at(state.currentIndex);
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
+    case "nextquestion":
+      return {
+        ...state,
+        currentIndex: state.currentIndex + 1,
+        answer: null
+      };
     default:
       throw new Error("Unknown action");
   }
 }
 
 export default function App() {
-  const [{ questions, status, currentIndex }, dispatch] = useReducer(
+  const [{ questions, status, currentIndex, answer }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -60,7 +79,16 @@ export default function App() {
         {status === "ready" && (
           <StartScreen numQustions={numQustions} dispatch={dispatch} />
         )}
-        {status === "active" && <Question question={questions[currentIndex]} />}
+        {status === "active" && (
+          <>
+          <Question
+            question={questions[currentIndex]}
+            dispatch={dispatch}
+            answer={answer}
+          />
+          <NextButton answer={answer} dispatch={dispatch}/>
+          </>
+        )}
       </Main>
     </div>
   );
