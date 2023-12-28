@@ -6,6 +6,8 @@ import Error from "./components/Error";
 import StartScreen from "./components/StartScreen";
 import Question from "./components/Question";
 import NextButton from "./components/NextButton";
+import Progress from "./components/Progress";
+import FinishScreen from "./components/FinishScreen";
 
 const initialState = {
   questions: [],
@@ -14,6 +16,7 @@ const initialState = {
   currentIndex: 0,
   answer: null,
   points: 0,
+  highscore: 0
 };
 
 function reducer(state, action) {
@@ -50,19 +53,29 @@ function reducer(state, action) {
         currentIndex: state.currentIndex + 1,
         answer: null
       };
+    case "finish":
+
+      return{
+        ...state, 
+        status: "finished",
+        highscore: state.points > state.highscore ? state.points : state.highscore
+      }
     default:
       throw new Error("Unknown action");
   }
 }
 
 export default function App() {
-  const [{ questions, status, currentIndex, answer }, dispatch] = useReducer(
+  const [{ questions, status, currentIndex, answer, points, highscore }, dispatch] = useReducer(
     reducer,
     initialState
   );
 
   // Derive state
   const numQustions = questions.length;
+  const maxPossiblePoints = questions.reduce((acc, cur) => {
+   return  acc + cur.points;
+  }, 0);
 
   useEffect(() => {
     fetch("http://localhost:9000/questions")
@@ -81,14 +94,16 @@ export default function App() {
         )}
         {status === "active" && (
           <>
+          <Progress numQustions={numQustions} currentIndex={currentIndex} points={points} maxPossiblePoints={maxPossiblePoints} answer={answer}/>
           <Question
             question={questions[currentIndex]}
             dispatch={dispatch}
             answer={answer}
           />
-          <NextButton answer={answer} dispatch={dispatch}/>
+          <NextButton answer={answer} dispatch={dispatch} numQustions={numQustions} currentIndex={currentIndex}/>
           </>
         )}
+         {status === "finished" && <FinishScreen points={points} maxPossiblePoints={maxPossiblePoints} highscore={highscore}/>}
       </Main>
     </div>
   );
