@@ -26,6 +26,10 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
+    case "getState":
+      return{
+        ...state,
+      }
     case "dataReceived":
       return {
         ...state,
@@ -60,6 +64,10 @@ function reducer(state, action) {
         answer: null
       };
     case "finish":
+
+
+      localStorage.setItem("questions", JSON.stringify(state));
+   
       return{
         ...state, 
         status: "finished",
@@ -100,6 +108,12 @@ export default function App() {
       .then((data) => dispatch({ type: "dataReceived", payload: data }))
       .catch((err) => dispatch({ type: "dataFailied" }));
   }, []);
+
+  useEffect(()=>{
+    const dataLocalStorage = JSON.parse(localStorage.getItem("questions"));
+    if (dataLocalStorage) dispatch({type: "getState"});
+  },[]);
+
   return (
     <div className="app">
       <Header />
