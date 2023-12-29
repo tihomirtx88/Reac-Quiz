@@ -16,10 +16,6 @@ This is small app for training purposes, where can you check you React knowledge
 
 <img align="center" alt="VisualStudioCode" height="25" width="35" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/visualstudio/visualstudio-plain.svg" style="max-width:100%;">[VSCode](https://code.visualstudio.com/)</img>
 
-### Installing on local machine
-
-```bash
-
 # Clone the repository
 $ git clone https://github.com/tihomirtx88/Reac-Quiz.git
 
