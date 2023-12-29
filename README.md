@@ -43,6 +43,6 @@ $ npm run server
 
 ## Authors
 <a href="https://github.com/tihomirtx88">
- <img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/88166066?v=4" width="100px;" alt=""/>
+ [<img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/88166066?v=4" width="100px;" alt=""/>](https://github.com/settings/profile)https://github.com/settings/profile
 </a>
 
